@@ -18,17 +18,20 @@ def parse_class_name(content):
     if -1 == end:
         raise Exception
 
+    if remove_extra_spaces(remove_html_tags(content[start: end])) == "__PHP_Incomplete_Class_Name":
+         return None
+
     return remove_extra_spaces(remove_html_tags(content[start: end]))
 
 def parse_php_methods(content):
     methods = []
     start, end = 0, 0
     while True:
-        start = content.find('<div class="methodsynopsis dc-description">', end)
+        start = content.find('<span class="methodname"><strong>'), end)
         if -1 == start:
             break
 
-        end = content.find('</div>', start)
+        end = content.find('</strong></span>', start)
         if -1 == end:
             raise Exception
 
